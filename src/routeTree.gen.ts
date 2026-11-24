@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ClergyRouteImport } from './routes/clergy'
+import { Route as ContactsRouteImport } from './routes/contacts'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClergyRoute = ClergyRouteImport.update({
+  id: '/clergy',
+  path: '/clergy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/clergy': typeof ClergyRoute
+  '/contacts': typeof ContactsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/clergy': typeof ClergyRoute
+  '/contacts': typeof ContactsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/clergy': typeof ClergyRoute
+  '/contacts': typeof ContactsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/clergy' | '/contacts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/clergy' | '/contacts'
+  id: '__root__' | '/' | '/clergy' | '/contacts'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ClergyRoute: typeof ClergyRoute
+  ContactsRoute: typeof ContactsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clergy': {
+      id: '/clergy'
+      path: '/clergy'
+      fullPath: '/clergy'
+      preLoaderRoute: typeof ClergyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ClergyRoute: ClergyRoute,
+  ContactsRoute: ContactsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
